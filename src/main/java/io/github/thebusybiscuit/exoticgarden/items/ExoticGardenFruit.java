@@ -55,7 +55,7 @@ public class ExoticGardenFruit extends SimpleSlimefunItem<ItemUseHandler> {
                 }
             }
 
-            if (edible && e.getPlayer().getFoodLevel() < 20) {
+            if (edible) {//Make always edible
                 restoreHunger(e.getPlayer());
                 ItemUtils.consumeItem(e.getItem(), false);
             }
