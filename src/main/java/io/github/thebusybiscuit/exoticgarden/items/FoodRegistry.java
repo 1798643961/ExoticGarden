@@ -527,6 +527,31 @@ public final class FoodRegistry {
         new ItemStack[] {getItem("RED_BELL_PEPPER"), getItem("ONION"), getItem("GARLIC"), getItem("TOMATO"), null, null, null, null, null},
         14)
         .register(plugin);
+
+        new CustomFood(food, new SlimefunItemStack("CHEESE_PIZZA", "7c3cb8ae6f65a1f5ddc66ea2f86d18f1651aa5c2d845a73d44b9e3339c7e", "&r芝士披萨", "", "&7&o恢复 &b&o" + "7.5" + " &7&o点饥饿值"),
+        new ItemStack[] {SlimefunItems.WHEAT_FLOUR, getItem("TOMATO"), getItem("CHEESE"), null, null, null, null, null, null},
+        15)
+        .register(plugin);
+
+        new CustomFood(food, new SlimefunItemStack("BACON_PIZZA", "899554fb47ee5aa96187e81505331b8f3492fff7b49f59e500d6535296692382", "&r培根披萨", "", "&7&o恢复 &b&o" + "8.0" + " &7&o点饥饿值"),
+        new ItemStack[] {SlimefunItems.WHEAT_FLOUR, getItem("TOMATO"), getItem("CHEESE"), getItem("BACON"), null, null, null, null, null},
+        16)
+        .register(plugin);
+
+        new CustomFood(food, new SlimefunItemStack("MUSHROOM_PIZZA", "b597dcad6acad3d35fa3b5e8af9aaf131d0feb095624f45b36453eae7dbaf14", "&r蘑菇披萨", "", "&7&o恢复 &b&o" + "8.0" + " &7&o点饥饿值"),
+        new ItemStack[] {SlimefunItems.WHEAT_FLOUR, getItem("TOMATO"), getItem("CHEESE"), new ItemStack(Material.BROWN_MUSHROOM), new ItemStack(Material.RED_MUSHROOM), null, null, null, null},
+        16)
+        .register(plugin);
+
+        new CustomFood(food, new SlimefunItemStack("FISH_PIZZA", "3752d75e8de1711178fbc028d88fe4ef908b893dc5c887b339d01fb888a24", "&r鱼披萨", "", "&7&o恢复 &b&o" + "8.0" + " &7&o点饥饿值"),
+        new ItemStack[] {SlimefunItems.WHEAT_FLOUR, getItem("TOMATO"), getItem("CHEESE"), new ItemStack(Material.COOKED_SALMON), new ItemStack(Material.COOKED_COD), null, null, null, null},
+        16)
+        .register(plugin);
+
+        new CustomFood(food, new SlimefunItemStack("VEGGIE_PIZZA", "d5c441cba4d6b57ded54c8369216a6c7156fb887d4b5639ee934f1bb6cbfdb", "&r蔬菜披萨", "", "&7&o恢复 &b&o" + "8.5" + " &7&o点饥饿值"),
+        new ItemStack[] {SlimefunItems.WHEAT_FLOUR, getItem("TOMATO"), getItem("CHEESE"), getItem("ONION"), getItem("CILANTRO"), getItem("BLACK_PEPPER"), null, null, null},
+        17)
+        .register(plugin);
     }
     
     @Nullable
