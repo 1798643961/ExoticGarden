@@ -49,14 +49,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
@@ -309,7 +302,7 @@ public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
                 byte[] buffer = new byte[1024];
                 int len;
 
-                while ((len = input.read(buffer)) > 0) {
+                while ((len = Objects.requireNonNull(input).read(buffer)) > 0) {
                     output.write(buffer, 0, len);
                 }
             }
