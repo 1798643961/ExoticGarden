@@ -11,15 +11,7 @@ ExoticGarden is licensed under
 [GNU General Public License v3.0](https://github.com/TheBusyBiscuit/ExoticGarden/blob/master/LICENSE)
 
 ## Download ExoticGarden
-Click on the badge below to go to our "development" build page, where you can download the latest versions before they are released to the public. 
-But keep in mind: These builds are still in development and not guaranteed to work or to be stable.
-
-<p align="center">
-  <a href="https://thebusybiscuit.github.io/builds/TheBusyBiscuit/ExoticGarden/master/">
-    <img src="https://thebusybiscuit.github.io/builds/TheBusyBiscuit/ExoticGarden/master/badge.svg" alt="Build Server"/>
-  </a>
-</p>
-
+Go to Actions to download ExoticGarden-CN.jar
 ## Contributions
 
 You are allowed, even encouraged, to contribute to ExoticGarden by making Pull Requests.
