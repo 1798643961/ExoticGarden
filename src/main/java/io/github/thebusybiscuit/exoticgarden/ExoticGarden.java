@@ -302,7 +302,7 @@ public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
                 byte[] buffer = new byte[1024];
                 int len;
 
-                while ((len = Objects.requireNonNull(input).read(buffer)) > 0) {
+                while ((len = input.read(buffer)) > 0) {
                     output.write(buffer, 0, len);
                 }
             }
