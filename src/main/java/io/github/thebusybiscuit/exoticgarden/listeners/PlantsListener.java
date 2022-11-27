@@ -172,9 +172,7 @@ public class PlantsListener implements Listener {
                             if (item != null) return;
                             if (!Tag.SAPLINGS.isTagged(blockAbove.getType()) && !Tag.LEAVES.isTagged(blockAbove.getType())) {
                                 switch (blockAbove.getType()) {
-                                    case AIR:
-                                    case CAVE_AIR:
-                                    case SNOW:
+                                    case AIR, CAVE_AIR, SNOW:
                                         break;
                                     default:
                                         return;
@@ -230,7 +228,7 @@ public class PlantsListener implements Listener {
                         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> current.setType(Material.OAK_LEAVES));
                     }
                     break;
-                case FRUIT:
+                    case FRUIT, ORE_PLANT, DOUBLE_PLANT:
                     if (isPaper) {
                         current.setType(Material.PLAYER_HEAD);
                         Rotatable s = (Rotatable) current.getBlockData();
@@ -245,27 +243,6 @@ public class PlantsListener implements Listener {
                             s.setRotation(faces[random.nextInt(faces.length)]);
                             current.setBlockData(s);
                             PlayerHead.setSkin(current, PlayerSkin.fromHashCode(berry.getTexture()), true);
-                        });
-                    }
-                    break;
-                case ORE_PLANT:
-                case DOUBLE_PLANT:
-                    if (isPaper) {
-                        current.setType(Material.PLAYER_HEAD);
-                        Rotatable s = (Rotatable) current.getBlockData();
-                        s.setRotation(faces[random.nextInt(faces.length)]);
-                        current.setBlockData(s);
-                        PlayerHead.setSkin(current, PlayerSkin.fromHashCode(berry.getTexture()), true);
-                    }
-                    else {
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                            BlockStorage.store(current.getRelative(BlockFace.UP), berry.getItem());
-                            current.setType(Material.OAK_LEAVES);
-                            current.getRelative(BlockFace.UP).setType(Material.PLAYER_HEAD);
-                            Rotatable ss = (Rotatable) current.getRelative(BlockFace.UP).getBlockData();
-                            ss.setRotation(faces[random.nextInt(faces.length)]);
-                            current.getRelative(BlockFace.UP).setBlockData(ss);
-                            PlayerHead.setSkin(current.getRelative(BlockFace.UP), PlayerSkin.fromHashCode(berry.getTexture()), true);
                         });
                     }
                     break;
