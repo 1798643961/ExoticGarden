@@ -6,4 +6,4 @@ chances:
   TREE: 22
   BUSH: 16
 options:
-  auto-update: true
+  auto-update: false
