@@ -563,6 +563,11 @@ public final class FoodRegistry {
         new ItemStack[] {SlimefunItems.WHEAT_FLOUR, getItem("TOMATO"), getItem("CHEESE"), getItem("ONION"), getItem("CILANTRO"), getItem("BLACK_PEPPER"), null, null, null},
         17)
         .register(plugin);
+
+        // Custom item
+        new Juice(drinks, new SlimefunItemStack("ICE_COLA", new CustomPotion("&c冰可乐", Color.fromRGB(37, 30, 15), new PotionEffect(PotionEffectType.SPEED, 1200, 0), "", "&7+ 速度加成", "", "&7&o上面贴着&c&o可口可乐&7&o的字样", "&7&o撕开后发现是&9&o百事", "&7&o这到底是什么可乐呢...")), RecipeType.ENHANCED_CRAFTING_TABLE,
+                new ItemStack[] { null, getItem("ICE_CUBE"), null, new ItemStack(Material.SUGAR), new ItemStack(Material.COCOA_BEANS), new ItemStack(Material.SUGAR), null, getItem("ICE_CUBE"), null
+                }).register(plugin);
     }
     
     @Nullable
