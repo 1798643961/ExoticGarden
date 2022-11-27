@@ -1,13 +1,6 @@
 package io.github.thebusybiscuit.exoticgarden;
 
-import io.github.thebusybiscuit.exoticgarden.items.BonemealableItem;
-import io.github.thebusybiscuit.exoticgarden.items.Crook;
-import io.github.thebusybiscuit.exoticgarden.items.CustomFood;
-import io.github.thebusybiscuit.exoticgarden.items.ExoticGardenFruit;
-import io.github.thebusybiscuit.exoticgarden.items.FoodRegistry;
-import io.github.thebusybiscuit.exoticgarden.items.GrassSeeds;
-import io.github.thebusybiscuit.exoticgarden.items.Kitchen;
-import io.github.thebusybiscuit.exoticgarden.items.MagicalEssence;
+import io.github.thebusybiscuit.exoticgarden.items.*;
 import io.github.thebusybiscuit.exoticgarden.listeners.AndroidListener;
 import io.github.thebusybiscuit.exoticgarden.listeners.PlantsListener;
 import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
@@ -28,14 +21,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
@@ -302,7 +288,7 @@ public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
                 byte[] buffer = new byte[1024];
                 int len;
 
-                while ((len = input.read(buffer)) > 0) {
+                while ((len = input != null ? input.read(buffer) : 0) > 0) {
                     output.write(buffer, 0, len);
                 }
             }
