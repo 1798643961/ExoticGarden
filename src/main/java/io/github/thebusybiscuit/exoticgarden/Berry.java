@@ -7,10 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class Berry {
 
+    private static final Set<Material> SOILS = EnumSet.of(Material.GRASS_BLOCK, Material.DIRT);
     private final ItemStack item;
     private final String id;
     private final String texture;
@@ -55,8 +58,7 @@ public class Berry {
     }
 
     public boolean isSoil(Material type) {
-        List<Material> soils = Arrays.asList(Material.GRASS_BLOCK, Material.DIRT);
-        return soils.contains(type);
+        return SOILS.contains(type);
     }
 
 }
