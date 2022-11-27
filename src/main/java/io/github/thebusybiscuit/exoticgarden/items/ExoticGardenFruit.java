@@ -53,7 +53,8 @@ public class ExoticGardenFruit extends SimpleSlimefunItem<ItemUseHandler> {
                 }
             }
 
-            if (edible) {//Make always edible
+            if (edible && e.getPlayer().getFoodLevel() < 20
+                    || edible && e.getPlayer().getAllowFlight()) {// Make player can eat fruit when in creative mode
                 restoreHunger(e.getPlayer());
                 ItemUtils.consumeItem(e.getItem(), false);
             }
