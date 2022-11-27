@@ -165,43 +165,36 @@ public class PlantsListener implements Listener {
             for (Berry berry : ExoticGarden.getBerries()) {
                 if (item.getId().equalsIgnoreCase(berry.toBush())) {
                     switch (berry.getType()) {
-                    case BUSH:
-                        e.getLocation().getBlock().setType(Material.OAK_LEAVES);
-                        break;
-                    case ORE_PLANT:
-                    case DOUBLE_PLANT:
-                        Block blockAbove = e.getLocation().getBlock().getRelative(BlockFace.UP);
-                        item = BlockStorage.check(blockAbove);
-                        if (item != null) return;
-
-                        if (!Tag.SAPLINGS.isTagged(blockAbove.getType()) && !Tag.LEAVES.isTagged(blockAbove.getType())) {
-                            switch (blockAbove.getType()) {
-                            case AIR:
-                            case CAVE_AIR:
-                            case SNOW:
-                                break;
-                            default:
-                                return;
+                        case BUSH -> e.getLocation().getBlock().setType(Material.OAK_LEAVES);
+                        case ORE_PLANT, DOUBLE_PLANT -> {
+                            Block blockAbove = e.getLocation().getBlock().getRelative(BlockFace.UP);
+                            item = BlockStorage.check(blockAbove);
+                            if (item != null) return;
+                            if (!Tag.SAPLINGS.isTagged(blockAbove.getType()) && !Tag.LEAVES.isTagged(blockAbove.getType())) {
+                                switch (blockAbove.getType()) {
+                                    case AIR:
+                                    case CAVE_AIR:
+                                    case SNOW:
+                                        break;
+                                    default:
+                                        return;
+                                }
                             }
+                            BlockStorage.store(blockAbove, berry.getItem());
+                            e.getLocation().getBlock().setType(Material.OAK_LEAVES);
+                            blockAbove.setType(Material.PLAYER_HEAD);
+                            Rotatable rotatable = (Rotatable) blockAbove.getBlockData();
+                            rotatable.setRotation(faces[ThreadLocalRandom.current().nextInt(faces.length)]);
+                            blockAbove.setBlockData(rotatable);
+                            PlayerHead.setSkin(blockAbove, PlayerSkin.fromHashCode(berry.getTexture()), true);
                         }
-
-                        BlockStorage.store(blockAbove, berry.getItem());
-                        e.getLocation().getBlock().setType(Material.OAK_LEAVES);
-                        blockAbove.setType(Material.PLAYER_HEAD);
-                        Rotatable rotatable = (Rotatable) blockAbove.getBlockData();
-                        rotatable.setRotation(faces[ThreadLocalRandom.current().nextInt(faces.length)]);
-                        blockAbove.setBlockData(rotatable);
-
-                        PlayerHead.setSkin(blockAbove, PlayerSkin.fromHashCode(berry.getTexture()), true);
-                        break;
-                    default:
-                        e.getLocation().getBlock().setType(Material.PLAYER_HEAD);
-                        Rotatable s = (Rotatable) e.getLocation().getBlock().getBlockData();
-                        s.setRotation(faces[ThreadLocalRandom.current().nextInt(faces.length)]);
-                        e.getLocation().getBlock().setBlockData(s);
-
-                        PlayerHead.setSkin(e.getLocation().getBlock(), PlayerSkin.fromHashCode(berry.getTexture()), true);
-                        break;
+                        default -> {
+                            e.getLocation().getBlock().setType(Material.PLAYER_HEAD);
+                            Rotatable s = (Rotatable) e.getLocation().getBlock().getBlockData();
+                            s.setRotation(faces[ThreadLocalRandom.current().nextInt(faces.length)]);
+                            e.getLocation().getBlock().setBlockData(s);
+                            PlayerHead.setSkin(e.getLocation().getBlock(), PlayerSkin.fromHashCode(berry.getTexture()), true);
+                        }
                     }
 
                     BlockStorage.deleteLocationInfoUnsafely(e.getLocation(), false);

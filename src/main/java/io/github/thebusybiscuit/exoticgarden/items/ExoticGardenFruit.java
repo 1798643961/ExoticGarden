@@ -65,37 +65,14 @@ public class ExoticGardenFruit extends SimpleSlimefunItem<ItemUseHandler> {
     private boolean isInteractable(@Nonnull Material material) {
         // We cannot rely on Material#isInteractable() sadly
         // as it would allow the placement of this block on strange items like stairs...
-        switch (material) {
-            case CRAFTING_TABLE:
-            case FURNACE:
-            case SMOKER:
-            case BLAST_FURNACE:
-            case JIGSAW:
-            case JUKEBOX:
-            case ENCHANTING_TABLE:
-            case ITEM_FRAME:
-            case LOOM:
-            case CARTOGRAPHY_TABLE:
-            case GRINDSTONE:
-            case SMITHING_TABLE:
-            case BELL:
-            case BEACON:
-            case ANVIL:
-            case BREWING_STAND:
-            case CAKE:
-            case CHEST:
-            case HOPPER:
-            case TRAPPED_CHEST:
-            case ENDER_CHEST:
-            case CAULDRON:
-            case SHULKER_BOX:
-                return true;
-            default:
-                return material.name().equals("BARREL") ||
-                        material.name().endsWith("_SHULKER_BOX") ||
-                        material.name().endsWith("DOOR") ||
-                        material.name().endsWith("BED");
-        }
+        return switch (material) {
+            case CRAFTING_TABLE, FURNACE, SMOKER, BLAST_FURNACE, JIGSAW, JUKEBOX, ENCHANTING_TABLE, ITEM_FRAME, LOOM, CARTOGRAPHY_TABLE, GRINDSTONE, SMITHING_TABLE, BELL, BEACON, ANVIL, BREWING_STAND, CAKE, CHEST, HOPPER, TRAPPED_CHEST, ENDER_CHEST, CAULDRON, SHULKER_BOX ->
+                    true;
+            default -> material.name().equals("BARREL") ||
+                    material.name().endsWith("_SHULKER_BOX") ||
+                    material.name().endsWith("DOOR") ||
+                    material.name().endsWith("BED");
+        };
     }
 
     protected int getFoodValue() {
