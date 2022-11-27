@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Rotatable;
@@ -45,6 +46,8 @@ import java.util.logging.Level;
  * @author TheBusyBiscuit
  */
 public class Schematic {
+
+    private static final BlockFace[] BLOCK_FACES = { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
 
     private final short[] blocks;
     private final byte[] data;
@@ -101,7 +104,11 @@ public class Schematic {
         return height;
     }
 
-    public static void pasteSchematic(Location loc, Tree tree) {
+    public static void pasteSchematic(Location loc, Tree tree, boolean doPhysics) {
+        pasteSchematic(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), tree, doPhysics);
+    }
+
+    public static void pasteSchematic(World world, int x1, int y1, int z1, Tree tree, boolean doPhysics) {
         Schematic schematic;
 
         try {
@@ -112,7 +119,6 @@ public class Schematic {
             return;
         }
 
-        BlockFace[] faces = { BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST };
         short[] blocks = schematic.getBlocks();
         byte[] blockData = schematic.getData();
 
@@ -120,23 +126,27 @@ public class Schematic {
         short width = schematic.getWidth();
         short height = schematic.getHeight();
 
+        // Performance - avoid repeatedly calculating this value in a loop
+        int processedX = x1 - length / 2;
+        int processedZ = z1 - width / 2;
+
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
 
-                    int blockX = x + loc.getBlockX() - length / 2;
-                    int blockY = y + loc.getBlockY();
-                    int blockZ = z + loc.getBlockZ() - width / 2;
-                    Block block = new Location(loc.getWorld(), blockX, blockY, blockZ).getBlock();
+                    int blockX = x + processedX;
+                    int blockY = y + y1;
+                    int blockZ = z + processedZ;
+                    Block block = world.getBlockAt(blockX, blockY, blockZ);
                     Material blockType = block.getType();
-                    
-                    if ((!blockType.isSolid() && !blockType.isInteractable() && !SlimefunTag.UNBREAKABLE_MATERIALS.isTagged(blockType)) || blockType == Material.AIR || blockType == Material.CAVE_AIR || org.bukkit.Tag.SAPLINGS.isTagged(blockType)) {
+
+                    if (blockType.isAir() || org.bukkit.Tag.SAPLINGS.isTagged(blockType) || (!blockType.isSolid() && !blockType.isInteractable() && !SlimefunTag.UNBREAKABLE_MATERIALS.isTagged(blockType))) {
                         Material material = parseId(blocks[index], blockData[index]);
 
                         if (material != null) {
                             if (blocks[index] != 0) {
-                                block.setType(material);
+                                block.setType(material, doPhysics);
                             }
 
                             if (org.bukkit.Tag.LEAVES.isTagged(material)) {
@@ -146,8 +156,8 @@ public class Schematic {
                             }
                             else if (material == Material.PLAYER_HEAD) {
                                 Rotatable s = (Rotatable) block.getBlockData();
-                                s.setRotation(faces[ThreadLocalRandom.current().nextInt(faces.length)]);
-                                block.setBlockData(s);
+                                s.setRotation(BLOCK_FACES[ThreadLocalRandom.current().nextInt(BLOCK_FACES.length)]);
+                                block.setBlockData(s, doPhysics);
 
                                 PlayerHead.setSkin(block, PlayerSkin.fromHashCode(tree.getTexture()), true);
                                 BlockStorage.store(block, tree.getFruit());
@@ -161,38 +171,38 @@ public class Schematic {
 
     public static Material parseId(short blockId, byte blockData) {
         switch (blockId) {
-        case 6:
-            if (blockData == 0) return Material.OAK_SAPLING;
-            if (blockData == 1) return Material.SPRUCE_SAPLING;
-            if (blockData == 2) return Material.BIRCH_SAPLING;
-            if (blockData == 3) return Material.JUNGLE_SAPLING;
-            if (blockData == 4) return Material.ACACIA_SAPLING;
-            if (blockData == 5) return Material.DARK_OAK_SAPLING;
-            break;
-        case 17:
-            if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.OAK_LOG;
-            if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.SPRUCE_LOG;
-            if (blockData == 2 || blockData == 6 || blockData == 10 || blockData == 14) return Material.BIRCH_LOG;
-            if (blockData == 3 || blockData == 7 || blockData == 11 || blockData == 15) return Material.JUNGLE_LOG;
-            break;
-        case 18:
-            if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.OAK_LEAVES;
-            if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.SPRUCE_LEAVES;
-            if (blockData == 2 || blockData == 6 || blockData == 10 || blockData == 14) return Material.BIRCH_LEAVES;
-            if (blockData == 3 || blockData == 7 || blockData == 11 || blockData == 15) return Material.JUNGLE_LEAVES;
-            return Material.OAK_LEAVES;
-        case 161:
-            if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.ACACIA_LEAVES;
-            if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.DARK_OAK_LEAVES;
-            break;
-        case 162:
-            if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.ACACIA_LOG;
-            if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.DARK_OAK_LOG;
-            break;
-        case 144:
-            return Material.PLAYER_HEAD;
-        default:
-            return null;
+            case 6:
+                if (blockData == 0) return Material.OAK_SAPLING;
+                if (blockData == 1) return Material.SPRUCE_SAPLING;
+                if (blockData == 2) return Material.BIRCH_SAPLING;
+                if (blockData == 3) return Material.JUNGLE_SAPLING;
+                if (blockData == 4) return Material.ACACIA_SAPLING;
+                if (blockData == 5) return Material.DARK_OAK_SAPLING;
+                break;
+            case 17:
+                if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.OAK_LOG;
+                if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.SPRUCE_LOG;
+                if (blockData == 2 || blockData == 6 || blockData == 10 || blockData == 14) return Material.BIRCH_LOG;
+                if (blockData == 3 || blockData == 7 || blockData == 11 || blockData == 15) return Material.JUNGLE_LOG;
+                break;
+            case 18:
+                if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.OAK_LEAVES;
+                if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.SPRUCE_LEAVES;
+                if (blockData == 2 || blockData == 6 || blockData == 10 || blockData == 14) return Material.BIRCH_LEAVES;
+                if (blockData == 3 || blockData == 7 || blockData == 11 || blockData == 15) return Material.JUNGLE_LEAVES;
+                return Material.OAK_LEAVES;
+            case 161:
+                if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.ACACIA_LEAVES;
+                if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.DARK_OAK_LEAVES;
+                break;
+            case 162:
+                if (blockData == 0 || blockData == 4 || blockData == 8 || blockData == 12) return Material.ACACIA_LOG;
+                if (blockData == 1 || blockData == 5 || blockData == 9 || blockData == 13) return Material.DARK_OAK_LOG;
+                break;
+            case 144:
+                return Material.PLAYER_HEAD;
+            default:
+                return null;
         }
 
         return null;
@@ -257,7 +267,7 @@ public class Schematic {
      *            The name of the tag to get
      * @param expected
      *            The expected type of the tag
-     * @return child tag casted to the expected type
+     * @return child tag cast to the expected type
      * @throws IllegalArgumentException
      *             if the tag does not exist or the tag is not of the
      *             expected type
