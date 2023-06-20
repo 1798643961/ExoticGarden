@@ -58,11 +58,16 @@ public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
     private ItemGroup drinksItemGroup;
     private ItemGroup magicalItemGroup;
     private Kitchen kitchen;
+    public static TranslateHelper I18N;
 
     @Override
     public void onEnable() {
         PaperLib.suggestPaper(this);
 
+        String lang = getConfig().getString("lang", "xx_XX");
+        String l = lang.split("_")[0];
+        String c = lang.split("_")[1];
+        I18N = new TranslateHelper(this.getClass(), new Locale(l, c));
         if (!schematicsFolder.exists()) {
             schematicsFolder.mkdirs();
         }
@@ -95,31 +100,31 @@ public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
         new SlimefunItem(miscItemGroup, iceCube, RecipeType.GRIND_STONE, new ItemStack[] {new ItemStack(Material.ICE), null, null, null, null, null, null, null, null}, new SlimefunItemStack(iceCube, 4))
         .register(this);
 
-        registerBerry("Grape", "葡萄", ChatColor.RED, Color.RED, PlantType.BUSH, "6ee97649bd999955413fcbf0b269c91be4342b10d0755bad7a17e95fcefdab0");
-        registerBerry("Blueberry", "蓝莓", ChatColor.BLUE, Color.BLUE, PlantType.BUSH, "a5a5c4a0a16dabc9b1ec72fc83e23ac15d0197de61b138babca7c8a29c820");
-        registerBerry("Elderberry", "接骨木果", ChatColor.RED, Color.FUCHSIA, PlantType.BUSH, "1e4883a1e22c324e753151e2ac424c74f1cc646eec8ea0db3420f1dd1d8b");
-        registerBerry("Raspberry", "树莓", ChatColor.LIGHT_PURPLE, Color.FUCHSIA, PlantType.BUSH, "8262c445bc2dd1c5bbc8b93f2482f9fdbef48a7245e1bdb361d4a568190d9b5");
-        registerBerry("Blackberry", "黑莓", ChatColor.DARK_GRAY, Color.GRAY, PlantType.BUSH, "2769f8b78c42e272a669d6e6d19ba8651b710ab76f6b46d909d6a3d482754");
-        registerBerry("Cranberry", "蔓越莓", ChatColor.RED, Color.FUCHSIA, PlantType.BUSH, "d5fe6c718fba719ff622237ed9ea6827d093effab814be2192e9643e3e3d7");
-        registerBerry("Cowberry", "越橘", ChatColor.RED, Color.FUCHSIA, PlantType.BUSH, "a04e54bf255ab0b1c498ca3a0ceae5c7c45f18623a5a02f78a7912701a3249");
-        registerBerry("Strawberry", "草莓", ChatColor.DARK_RED, Color.FUCHSIA, PlantType.FRUIT, "cbc826aaafb8dbf67881e68944414f13985064a3f8f044d8edfb4443e76ba");
+        registerBerry("Grape", I18N.get("berry.grape"), ChatColor.RED, Color.RED, PlantType.BUSH, "6ee97649bd999955413fcbf0b269c91be4342b10d0755bad7a17e95fcefdab0");
+        registerBerry("Blueberry", I18N.get("berry.blueberry"), ChatColor.BLUE, Color.BLUE, PlantType.BUSH, "a5a5c4a0a16dabc9b1ec72fc83e23ac15d0197de61b138babca7c8a29c820");
+        registerBerry("Elderberry", I18N.get("berry.elderberry"), ChatColor.RED, Color.FUCHSIA, PlantType.BUSH, "1e4883a1e22c324e753151e2ac424c74f1cc646eec8ea0db3420f1dd1d8b");
+        registerBerry("Raspberry", I18N.get("berry.raspberry"), ChatColor.LIGHT_PURPLE, Color.FUCHSIA, PlantType.BUSH, "8262c445bc2dd1c5bbc8b93f2482f9fdbef48a7245e1bdb361d4a568190d9b5");
+        registerBerry("Blackberry", I18N.get("berry.blackberry"), ChatColor.DARK_GRAY, Color.GRAY, PlantType.BUSH, "2769f8b78c42e272a669d6e6d19ba8651b710ab76f6b46d909d6a3d482754");
+        registerBerry("Cranberry", I18N.get("berry.cranberry"), ChatColor.RED, Color.FUCHSIA, PlantType.BUSH, "d5fe6c718fba719ff622237ed9ea6827d093effab814be2192e9643e3e3d7");
+        registerBerry("Cowberry", I18N.get("berry.cowberry"), ChatColor.RED, Color.FUCHSIA, PlantType.BUSH, "a04e54bf255ab0b1c498ca3a0ceae5c7c45f18623a5a02f78a7912701a3249");
+        registerBerry("Strawberry", I18N.get("berry.strawberry"), ChatColor.DARK_RED, Color.FUCHSIA, PlantType.FRUIT, "cbc826aaafb8dbf67881e68944414f13985064a3f8f044d8edfb4443e76ba");
 
-        registerPlant("Tomato", "番茄", ChatColor.DARK_RED, PlantType.FRUIT, "99172226d276070dc21b75ba25cc2aa5649da5cac745ba977695b59aebd");
-        registerPlant("Lettuce", "生菜", ChatColor.DARK_GREEN, PlantType.FRUIT, "477dd842c975d8fb03b1add66db8377a18ba987052161f22591e6a4ede7f5");
-        registerPlant("Tea Leaf", "茶叶", ChatColor.GREEN, PlantType.DOUBLE_PLANT, "1514c8b461247ab17fe3606e6e2f4d363dccae9ed5bedd012b498d7ae8eb3");
-        registerPlant("Cabbage", "卷心菜", ChatColor.DARK_GREEN, PlantType.FRUIT, "fcd6d67320c9131be85a164cd7c5fcf288f28c2816547db30a3187416bdc45b");
-        registerPlant("Sweet Potato","地瓜", ChatColor.GOLD, PlantType.FRUIT, "3ff48578b6684e179944ab1bc75fec75f8fd592dfb456f6def76577101a66");
-        registerPlant("Mustard Seed", "芥菜籽", ChatColor.YELLOW, PlantType.FRUIT, "ed53a42495fa27fb925699bc3e5f2953cc2dc31d027d14fcf7b8c24b467121f");
-        registerPlant("Curry Leaf", "咖喱叶", ChatColor.DARK_GREEN, PlantType.DOUBLE_PLANT, "32af7fa8bdf3252f69863b204559d23bfc2b93d41437103437ab1935f323a31f");
-        registerPlant("Onion", "洋葱", ChatColor.RED, PlantType.FRUIT, "6ce036e327cb9d4d8fef36897a89624b5d9b18f705384ce0d7ed1e1fc7f56");
-        registerPlant("Garlic", "大蒜", ChatColor.RESET, PlantType.FRUIT, "3052d9c11848ebcc9f8340332577bf1d22b643c34c6aa91fe4c16d5a73f6d8");
-        registerPlant("Cilantro", "香菜", ChatColor.GREEN, PlantType.DOUBLE_PLANT, "16149196f3a8d6d6f24e51b27e4cb71c6bab663449daffb7aa211bbe577242");
-        registerPlant("Black Pepper", "黑胡椒", ChatColor.DARK_GRAY, PlantType.DOUBLE_PLANT, "2342b9bf9f1f6295842b0efb591697b14451f803a165ae58d0dcebd98eacc");
-        registerPlant("Green Durian", "青榴莲", ChatColor.GREEN, PlantType.FRUIT, "aaa139ecc894c4e455825e313b542e2068601f2f31ab26d30cf276d51345bf3b");
-        registerPlant("Durian", "榴莲", ChatColor.GOLD, PlantType.FRUIT, "44ba890fa8d8684c5119cf1b4b9d5460f5eff392e26ce68b3434e52d18fc666");
-        registerPlant("Honeydew Melon", "哈密瓜", ChatColor.DARK_GREEN, PlantType.FRUIT, "fb14cba0f42a2d138ed243b3bff99cb1ea8cbdcd94fb5fb1e3a307f8e21ab1c");
-        registerPlant("Demon Melon", "恶魔瓜", ChatColor.DARK_GRAY, PlantType.FRUIT, "24c66af64948fd84493dacd1a9dc40736a30931707d838948949bd8e9488d575");
-        registerPlant("Papaya", "木瓜", ChatColor.YELLOW, PlantType.FRUIT, "631233362962e34f70de66c26ee6fcd2bbd5bc345c744f2dc42a73d779e0647e");
+        registerPlant("Tomato", I18N.get("plant.tomato"), ChatColor.DARK_RED, PlantType.FRUIT, "99172226d276070dc21b75ba25cc2aa5649da5cac745ba977695b59aebd");
+        registerPlant("Lettuce", I18N.get("plant.lettuce"), ChatColor.DARK_GREEN, PlantType.FRUIT, "477dd842c975d8fb03b1add66db8377a18ba987052161f22591e6a4ede7f5");
+        registerPlant("Tea Leaf", I18N.get("plant.tea_leaf"), ChatColor.GREEN, PlantType.DOUBLE_PLANT, "1514c8b461247ab17fe3606e6e2f4d363dccae9ed5bedd012b498d7ae8eb3");
+        registerPlant("Cabbage", I18N.get("plant.cabbage"), ChatColor.DARK_GREEN, PlantType.FRUIT, "fcd6d67320c9131be85a164cd7c5fcf288f28c2816547db30a3187416bdc45b");
+        registerPlant("Sweet Potato",I18N.get("plant.sweet_potato"), ChatColor.GOLD, PlantType.FRUIT, "3ff48578b6684e179944ab1bc75fec75f8fd592dfb456f6def76577101a66");
+        registerPlant("Mustard Seed", I18N.get("plant.mustard_seed"), ChatColor.YELLOW, PlantType.FRUIT, "ed53a42495fa27fb925699bc3e5f2953cc2dc31d027d14fcf7b8c24b467121f");
+        registerPlant("Curry Leaf", I18N.get("plant.curry_leaf"), ChatColor.DARK_GREEN, PlantType.DOUBLE_PLANT, "32af7fa8bdf3252f69863b204559d23bfc2b93d41437103437ab1935f323a31f");
+        registerPlant("Onion", I18N.get("plant.onion"), ChatColor.RED, PlantType.FRUIT, "6ce036e327cb9d4d8fef36897a89624b5d9b18f705384ce0d7ed1e1fc7f56");
+        registerPlant("Garlic", I18N.get("plant.garlic"), ChatColor.RESET, PlantType.FRUIT, "3052d9c11848ebcc9f8340332577bf1d22b643c34c6aa91fe4c16d5a73f6d8");
+        registerPlant("Cilantro", I18N.get("plant.cilantro"), ChatColor.GREEN, PlantType.DOUBLE_PLANT, "16149196f3a8d6d6f24e51b27e4cb71c6bab663449daffb7aa211bbe577242");
+        registerPlant("Black Pepper", I18N.get("plant.black_pepper"), ChatColor.DARK_GRAY, PlantType.DOUBLE_PLANT, "2342b9bf9f1f6295842b0efb591697b14451f803a165ae58d0dcebd98eacc");
+        registerPlant("Green Durian", I18N.get("plant.green_durian"), ChatColor.GREEN, PlantType.FRUIT, "aaa139ecc894c4e455825e313b542e2068601f2f31ab26d30cf276d51345bf3b");
+        registerPlant("Durian", I18N.get("plant.durian"), ChatColor.GOLD, PlantType.FRUIT, "44ba890fa8d8684c5119cf1b4b9d5460f5eff392e26ce68b3434e52d18fc666");
+        registerPlant("Honeydew Melon", I18N.get("plant.honeydew_melon"), ChatColor.DARK_GREEN, PlantType.FRUIT, "fb14cba0f42a2d138ed243b3bff99cb1ea8cbdcd94fb5fb1e3a307f8e21ab1c");
+        registerPlant("Demon Melon", I18N.get("plant.demon_melon"), ChatColor.DARK_GRAY, PlantType.FRUIT, "24c66af64948fd84493dacd1a9dc40736a30931707d838948949bd8e9488d575");
+        registerPlant("Papaya", I18N.get("plant.papaya"), ChatColor.YELLOW, PlantType.FRUIT, "631233362962e34f70de66c26ee6fcd2bbd5bc345c744f2dc42a73d779e0647e");
 
         registerPlant("Leek", "葱", ChatColor.GREEN, PlantType.FRUIT, "c2dd5433db4fddebc4a77166735699400cb18d43672ab31326a83f0b7c2586cc");
         registerPlant("Ginger", "生姜", ChatColor.YELLOW, PlantType.FRUIT, "693c3512fc5885fccbb25d2daf7fdcfae82641ed7e5e3597cddf73e41159f24");
