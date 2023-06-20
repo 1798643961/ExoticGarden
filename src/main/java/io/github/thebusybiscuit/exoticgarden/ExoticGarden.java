@@ -416,14 +416,14 @@ public class ExoticGarden extends JavaPlugin implements SlimefunAddon {
                         block.setType(Material.AIR, false);
 
                         plant.setType(Material.OAK_SAPLING, false);
-                        BlockStorage.deleteLocationInfoUnsafely(block.getRelative(BlockFace.UP).getLocation(), false);
-                        BlockStorage.deleteLocationInfoUnsafely(plant.getLocation(), false);
+                        BlockStorage.clearBlockInfo(block.getRelative(BlockFace.UP).getLocation(), false);
+                        BlockStorage.clearBlockInfo(plant.getLocation(), false);
                         BlockStorage.store(plant, getItem(berry.toBush()));
                         return berry.getItem().clone();
                     }
                     default -> {
                         block.setType(Material.OAK_SAPLING);
-                        BlockStorage.deleteLocationInfoUnsafely(block.getLocation(), false);
+                        BlockStorage.clearBlockInfo(block.getLocation(), false);
                         BlockStorage.store(block, getItem(berry.toBush()));
                         return berry.getItem().clone();
                     }

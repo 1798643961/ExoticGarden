@@ -30,8 +30,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
-    compileOnly 'com.github.slimefun:Slimefun4:RC-31'
+    compileOnly 'io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT'
+    compileOnly fileTree("lib/Slimefun.jar")
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly 'org.bstats:bstats-bukkit:3.0.0'
 }

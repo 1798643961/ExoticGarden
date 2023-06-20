@@ -200,7 +200,7 @@ public class PlantsListener implements Listener {
                         }
                     }
 
-                    BlockStorage.deleteLocationInfoUnsafely(e.getLocation(), false);
+                    BlockStorage.clearBlockInfo(e.getLocation(), false);
                     BlockStorage.store(e.getLocation().getBlock(), berry.getItem());
                     e.getWorld().playEffect(e.getLocation(), Effect.STEP_SOUND, Material.OAK_LEAVES);
                     break;
